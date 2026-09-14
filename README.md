@@ -17,7 +17,7 @@
 [![Vercel](https://img.shields.io/badge/Hosting-Vercel-000?logo=vercel)](https://vercel.com)
 [![Tests](https://img.shields.io/badge/tests-37%20passing-2ea44f)](#8-quality)
 
-**[▶ 2-minute walkthrough](VIDEO_URL)** · **[🌐 Live demo](https://dealscout-blond.vercel.app)** · **[🔌 API demo](#9-api-demonstration)** · **[📊 Sample report](docs/sample-pipeline-brief.html)**
+**[▶ 2-minute walkthrough](https://www.capcut.com/sv2/ZS9SnNPBhuJ9G-dpAjg/)** · **[🌐 Live demo](https://dealscout-blond.vercel.app)** · **[🔌 API demo](#9-api-demonstration)** · **[📊 Sample report](docs/sample-pipeline-brief.html)**
 
 </div>
 
