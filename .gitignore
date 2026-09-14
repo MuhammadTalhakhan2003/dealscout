@@ -47,5 +47,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# agent skill docs installed by the Vercel Turso integration
+.agents/
+.claude/skills/turso-cloud/
+skills-lock.json
+
 .vercel
 .env*

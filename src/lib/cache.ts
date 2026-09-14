@@ -28,6 +28,8 @@ function db() {
            domain TEXT PRIMARY KEY, data TEXT NOT NULL, fetched_at INTEGER NOT NULL)`,
         `CREATE TABLE IF NOT EXISTS outreach_cache (
            key TEXT PRIMARY KEY, data TEXT NOT NULL, created_at INTEGER NOT NULL)`,
+        `CREATE TABLE IF NOT EXISTS rate_limits (
+           key TEXT PRIMARY KEY, window_start INTEGER NOT NULL, hits INTEGER NOT NULL)`,
       ],
       "write",
     );
@@ -102,5 +104,34 @@ export async function putCachedDraft(key: string, draft: OutreachDraft): Promise
     });
   } catch (err) {
     console.warn("[cache] draft write failed", err);
+  }
+}
+
+const quotaMemory = new Map<string, { window: number; hits: number }>();
+
+/** Records one use of `key` in the current fixed window; returns false once `limit` is exceeded. */
+export async function consumeQuota(key: string, limit: number, windowMs: number): Promise<boolean> {
+  const window = Math.floor(Date.now() / windowMs) * windowMs;
+  try {
+    const { client, ready } = db();
+    await ready;
+    // SET expressions see the row's old values, so a new window resets the counter to 1.
+    const rs = await client.execute({
+      sql: `INSERT INTO rate_limits (key, window_start, hits) VALUES (?, ?, 1)
+            ON CONFLICT(key) DO UPDATE SET
+              hits = CASE WHEN window_start = excluded.window_start THEN hits + 1 ELSE 1 END,
+              window_start = excluded.window_start
+            RETURNING hits`,
+      args: [key, window],
+    });
+    return Number(rs.rows[0]?.hits ?? 1) <= limit;
+  } catch (err) {
+    // Shared counter unavailable: fall back to a per-instance one rather than failing open.
+    console.warn("[cache] quota check failed, using per-instance counter", err);
+    const cur = quotaMemory.get(key);
+    const hits = cur && cur.window === window ? cur.hits + 1 : 1;
+    if (quotaMemory.size > MEMORY_LIMIT) quotaMemory.clear();
+    quotaMemory.set(key, { window, hits });
+    return hits <= limit;
   }
 }

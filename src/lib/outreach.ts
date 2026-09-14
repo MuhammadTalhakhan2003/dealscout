@@ -21,6 +21,35 @@ export interface OutreachRequest {
   tone: Tone;
 }
 
+const TONES: readonly Tone[] = ["warm", "direct", "formal"];
+const text = (v: unknown, max: number) => (typeof v === "string" ? v.slice(0, max) : undefined);
+const texts = (v: unknown, count: number, max: number) =>
+  Array.isArray(v) ? v.filter((s): s is string => typeof s === "string").slice(0, count).map((s) => s.slice(0, max)) : [];
+
+/** Validates and bounds every client-supplied field, so the public endpoint can't be fed oversized prompts. */
+export function normalizeOutreachRequest(body: unknown): OutreachRequest | null {
+  const b = (body ?? {}) as Record<string, unknown>;
+  const sender = (b.sender ?? {}) as Record<string, unknown>;
+  const company = text(b.company, 200);
+  const domain = text(b.domain, 253);
+  if (!company || !domain) return null;
+  return {
+    domain,
+    company,
+    ownerName: text(b.ownerName, 120),
+    industry: text(b.industry, 120),
+    location: text(b.location, 200),
+    foundedYear: typeof b.foundedYear === "number" && Number.isFinite(b.foundedYear) ? Math.trunc(b.foundedYear) : undefined,
+    description: text(b.description, 1000),
+    headings: Array.isArray(b.headings) ? texts(b.headings, 6, 200) : undefined,
+    signals: texts(b.signals, 12, 300),
+    gaps: texts(b.gaps, 12, 300),
+    websiteExcerpt: text(b.websiteExcerpt, 2000),
+    sender: { name: text(sender.name, 120) ?? "", background: text(sender.background, 500) ?? "" },
+    tone: TONES.includes(b.tone as Tone) ? (b.tone as Tone) : "warm",
+  };
+}
+
 const DraftSchema = z.object({
   subject: z.string(),
   email: z.string(),
