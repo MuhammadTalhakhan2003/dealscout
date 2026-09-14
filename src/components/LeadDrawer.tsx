@@ -66,12 +66,14 @@ function Flag({ ok, label }: { ok: boolean; label: string }) {
 export function LeadDrawer({
   item,
   sender,
+  aiEnabled,
   onClose,
   onUpdate,
   onRecrawl,
 }: {
   item: ScoredLead;
   sender: SenderProfile;
+  aiEnabled: boolean;
   onClose: () => void;
   onUpdate: (patch: Partial<Lead>) => void;
   onRecrawl: () => void;
@@ -243,7 +245,7 @@ export function LeadDrawer({
             />
             <Button variant="primary" size="sm" disabled={generating || pending} onClick={() => generate(!!draft)}>
               {generating ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
-              {generating ? "Drafting…" : draft ? "Regenerate" : "Draft with Claude"}
+              {generating ? "Drafting…" : draft ? "Regenerate" : aiEnabled ? "Draft with Claude" : "Draft outreach"}
             </Button>
           </div>
           {!sender.name && !draft && (

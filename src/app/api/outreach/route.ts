@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     (await consumeQuota(`outreach:ip:${ip}`, DRAFTS_PER_IP_PER_HOUR, HOUR_MS)) &&
     (await consumeQuota("outreach:all", DRAFTS_PER_DAY, 24 * HOUR_MS));
   if (!allowed) {
-    const draft = { ...templateDraft(req), note: "AI drafting limit reached for now — showing template draft. Try again later." };
+    const draft = { ...templateDraft(req), note: "AI drafting limit reached for now — showing a template draft. Try again later." };
     return Response.json({ draft, cached: false });
   }
 
@@ -48,8 +48,9 @@ export async function POST(request: Request) {
     await putCachedDraft(key, draft);
     return Response.json({ draft, cached: false });
   } catch (e) {
-    console.error("[outreach] Claude call failed", e);
-    const draft = { ...templateDraft(req), note: `Claude unavailable (${describeClaudeError(e)}) — showing template draft.` };
+    // The specific cause (billing, auth, rate limit…) stays in the server logs; visitors get a calm note.
+    console.error(`[outreach] Claude call failed: ${describeClaudeError(e)}`, e);
+    const draft = { ...templateDraft(req), note: "AI drafting is temporarily unavailable — showing a template draft." };
     return Response.json({ draft, cached: false });
   }
 }

@@ -428,6 +428,7 @@ export default function App() {
           key={selected.lead.id}
           item={selected}
           sender={sender}
+          aiEnabled={status?.ai ?? false}
           onClose={() => setSelectedId(null)}
           onUpdate={(patch) => updateLead(selected.lead.id, patch)}
           onRecrawl={() => void enrich([selected.lead.domain], true)}
