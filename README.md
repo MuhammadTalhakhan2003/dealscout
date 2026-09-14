@@ -351,5 +351,5 @@ docs/                        screenshots + sample report
 ---
 
 <div align="center">
-<sub>Built by <b>Muhammad Talha</b> for the Caprae Capital AI-Readiness Challenge · <a href="LINKEDIN_URL">LinkedIn</a> · <a href="mailto:EMAIL">Email</a></sub>
+<sub>Built by <b>Muhammad Talha</b> for the Caprae Capital AI-Readiness Challenge · <a href="https://www.linkedin.com/in/muhammad-talha-khan-5849a5220/">LinkedIn</a> · <a href="https://muhammadtalhakhan2003.github.io/PortFolio_Talha/">Portfolio</a> · <a href="mailto:talhakhan050203@gmail.com">Email</a></sub>
 </div>
