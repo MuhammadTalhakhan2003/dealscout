@@ -1,0 +1,10 @@
+# Keep secrets and local artefacts out of CLI uploads (env vars are set in Vercel instead)
+.env*
+!.env.example
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+node_modules
+.next
+*.tsbuildinfo
