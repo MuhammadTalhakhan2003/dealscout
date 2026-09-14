@@ -17,7 +17,7 @@
 [![Vercel](https://img.shields.io/badge/Hosting-Vercel-000?logo=vercel)](https://vercel.com)
 [![Tests](https://img.shields.io/badge/tests-37%20passing-2ea44f)](#8-quality)
 
-**[▶ 2-minute walkthrough](VIDEO_URL)** · **[🌐 Live demo](DEMO_URL)** · **[🔌 API demo](#9-api-demonstration)** · **[📊 Sample report](docs/sample-pipeline-brief.html)**
+**[▶ 2-minute walkthrough](VIDEO_URL)** · **[🌐 Live demo](https://dealscout-blond.vercel.app)** · **[🔌 API demo](#9-api-demonstration)** · **[📊 Sample report](docs/sample-pipeline-brief.html)**
 
 </div>
 
@@ -272,7 +272,7 @@ Returns `{ draft: { subject, email, callOpener, whyNow, valueCreationIdeas[3], d
 **Prerequisites:** Node.js 20+ (developed on Node 22).
 
 ```bash
-git clone <this-repo> && cd dealscout
+git clone https://github.com/MuhammadTalhakhan2003/dealscout.git && cd dealscout
 npm install
 cp .env.example .env.local     # optional: add ANTHROPIC_API_KEY for Claude drafting
 npm run dev                    # http://localhost:3000 → "Run it on the sample dataset"
